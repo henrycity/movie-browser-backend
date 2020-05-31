@@ -77,8 +77,6 @@ export const protect = async (req: Request, res: Response, next: () => void) => 
         return res.status(401).end();
     }
 
-    const dd = await User.findByPk(payload.id);
-    console.log('dd', dd);
     const user = await User.findByPk(payload.id, { attributes: ['id', 'email', 'lists'] });
 
     if (!user) {

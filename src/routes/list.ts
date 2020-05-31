@@ -17,8 +17,14 @@ router.put('/', async (req: Request, res: Response) => {
     res.json(updatedUser);
 });
 
+router.get('/:type', async (req: Request, res: Response) => {
+    const movies = await List.findAll({ where: { userId: req.user.id, type: req.params.type } });
+    res.json(movies);
+});
+
 router.post('/:type', async (req: Request, res: Response) => {
-    const { movieId, type } = req.body;
+    const { type } = req.params;
+    const { movieId } = req.body;
     const item = await List.create({
         userId: req.user.id,
         movieId,

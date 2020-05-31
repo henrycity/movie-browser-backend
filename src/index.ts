@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-import { sequelize } from './sequelize';
+import { sequelize } from './utils/sequelize';
 import routes from './routes';
 import { protect, signin, signup } from './utils/auth';
 
