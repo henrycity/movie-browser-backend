@@ -6,8 +6,8 @@ import { User } from '../models/user';
 const router = Router();
 
 router.get('/', async (req: Request, res: Response) => {
-    const movies = await List.findAll({ where: { userId: req.user.id } });
-    res.json(movies);
+    const user = await User.findByPk(req.user.id);
+    res.json(user.lists);
 });
 
 router.post('/', async (req: Request, res: Response) => {
