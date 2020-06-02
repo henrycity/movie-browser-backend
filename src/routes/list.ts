@@ -10,11 +10,14 @@ router.get('/', async (req: Request, res: Response) => {
     res.json(movies);
 });
 
-router.put('/', async (req: Request, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {
     const user = await User.findByPk(req.user.id);
     user.lists.push(req.body.list);
-    const updatedUser = await User.update({ lists: user.lists }, { where: { id: req.user.id }, returning: true });
-    res.json(updatedUser);
+    const updatedUser = await User.update(
+        { lists: user.lists },
+        { where: { id: req.user.id }, returning: true, plain: true },
+    );
+    res.json(updatedUser[1].lists);
 });
 
 router.get('/:type', async (req: Request, res: Response) => {
