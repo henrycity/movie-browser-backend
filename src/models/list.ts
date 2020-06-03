@@ -12,7 +12,7 @@ export class List extends Model<List> {
 
     @AllowNull(false)
     @Column
-    type: string;
+    listName: string;
 
     @Column
     userRating: number;
