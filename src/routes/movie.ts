@@ -7,11 +7,19 @@ import { List } from '../models/list';
 const router = Router();
 
 router.get('/', async (req: Request, res: Response) => {
-    const { page } = req.query;
-    const { data } = await axios.get(
-        `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=${page}`,
-    );
-    res.json(data.results);
+    const { page = 1, query } = req.query;
+    let response;
+    if (query) {
+        console.log('query', query);
+        response = await axios.get(
+            `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=en-US&query=${query}&page=${page}`,
+        );
+    } else {
+        response = await axios.get(
+            `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=${page}`,
+        );
+    }
+    res.json(response.data.results);
 });
 
 router.get('/:movieId', async (req: Request, res: Response) => {
