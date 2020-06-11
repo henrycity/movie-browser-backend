@@ -20,11 +20,8 @@ router.post('/', async (req: Request, res: Response) => {
     const { listName } = req.body;
     if (listName) {
         user.lists.push(listName);
-        const updatedUser = await User.update(
-            { lists: user.lists },
-            { where: { id: req.user.id }, returning: true, plain: true },
-        );
-        res.json(updatedUser[1].lists);
+        const updatedUser = await User.update({ lists: user.lists }, { where: { id: req.user.id }, returning: true });
+        res.json(updatedUser[1][0].dataValues.lists);
     } else {
         res.sendStatus(400);
     }

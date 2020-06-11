@@ -4,18 +4,21 @@ import jwt from 'jsonwebtoken';
 import { User } from '../models/user';
 import { JSON_EXPIRE, JSON_SECRET } from '../constants';
 
+interface JwtPayload {
+    id: string;
+}
+
 export const newToken = (userId: number) => {
     return jwt.sign({ id: userId }, JSON_SECRET, {
         expiresIn: JSON_EXPIRE,
     });
 };
 
-export const verifyToken = (token: string) =>
+export const verifyToken = (token: string): Promise<JwtPayload> =>
     new Promise((resolve, reject) => {
         jwt.verify(token, JSON_SECRET, (err, payload) => {
-            console.log('payload', payload);
             if (err) return reject(err);
-            resolve(payload);
+            resolve(payload as JwtPayload);
         });
     });
 
@@ -29,7 +32,7 @@ export const signup = async (req: Request, res: Response) => {
         const token = newToken(user.id);
         return res.status(201).send({ token });
     } catch (e) {
-        return res.status(500).end();
+        res.status(500).end();
     }
 };
 
@@ -55,7 +58,7 @@ export const signin = async (req: Request, res: Response) => {
         }
 
         const token = newToken(user.id);
-        return res.status(201).send({ token });
+        res.status(201).send({ token });
     } catch (e) {
         console.error(e);
         res.status(500).end();
@@ -70,7 +73,7 @@ export const protect = async (req: Request, res: Response, next: () => void) => 
     }
 
     const token = bearer.split('Bearer ')[1].trim();
-    let payload;
+    let payload: JwtPayload | null = null;
     try {
         payload = await verifyToken(token);
     } catch (e) {
