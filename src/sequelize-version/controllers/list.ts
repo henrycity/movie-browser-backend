@@ -1,21 +1,19 @@
-import { Request, Response, Router } from 'express';
+import { Request, Response } from 'express';
 import groupBy from 'lodash.groupby';
 
 import { List } from '../models/list';
 import { User } from '../models/user';
 
-const router = Router();
-
-router.get('/', async (req: Request, res: Response) => {
+export const getLists = async (req: Request, res: Response) => {
     const lists = await List.findAll({
         where: { userId: req.user.id },
         attributes: ['userId', 'movieId', 'listName', 'userRating'],
     });
     const listsGroupByListName = groupBy(lists, 'listName');
     res.json(listsGroupByListName);
-});
+};
 
-router.post('/', async (req: Request, res: Response) => {
+export const createList = async (req: Request, res: Response) => {
     const user = await User.findByPk(req.user.id);
     const { listName } = req.body;
     if (listName) {
@@ -25,14 +23,14 @@ router.post('/', async (req: Request, res: Response) => {
     } else {
         res.sendStatus(400);
     }
-});
+};
 
-router.get('/:listName', async (req: Request, res: Response) => {
+export const getList = async (req: Request, res: Response) => {
     const movies = await List.findAll({ where: { userId: req.user.id, listName: req.params.listName } });
     res.json(movies);
-});
+};
 
-router.post('/:listName', async (req: Request, res: Response) => {
+export const addMovieToList = async (req: Request, res: Response) => {
     const { listName } = req.params;
     const { movieId } = req.body;
     const item = await List.create({
@@ -41,6 +39,4 @@ router.post('/:listName', async (req: Request, res: Response) => {
         listName,
     });
     res.json(item);
-});
-
-export default router;
+};
