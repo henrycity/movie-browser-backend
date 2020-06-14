@@ -13,7 +13,7 @@ export class List extends Model<List> {
     userId: number;
 
     @Column
-    movieId: string;
+    movieId: number;
 
     @AllowNull(false)
     @Column
