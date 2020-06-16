@@ -9,9 +9,12 @@
     "build": "tsc",
     "start": "NODE_ENV=production node ./build/index.js",
     "dev": "ts-node-dev --respawn --transpileOnly src/sequelize-version/index.ts",
-    "lint": "eslint '**/*.ts' --quiet --fix"
+    "dev:graphql": "ts-node-dev --respawn --transpileOnly src/graphql-version/index.ts",
+    "lint": "eslint '**/*.ts' --quiet --fix",
+    "graphql-codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
+    "apollo-server": "^2.14.4",
     "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
@@ -24,6 +27,7 @@
     "sequelize": "^5.21.12"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "1.15.3",
     "@types/axios": "^0.14.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/cors": "^2.8.6",
@@ -39,7 +43,10 @@
     "reflect-metadata": "^0.1.13",
     "sequelize-typescript": "^1.1.0",
     "ts-node-dev": "^1.0.0-pre.44",
-    "typescript": "^3.9.5"
+    "typescript": "^3.9.5",
+    "@graphql-codegen/typescript": "1.15.3",
+    "@graphql-codegen/typescript-resolvers": "1.15.3",
+    "@graphql-codegen/introspection": "1.15.3"
   },
   "husky": {
     "hooks": {

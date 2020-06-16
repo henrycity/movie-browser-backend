@@ -6,7 +6,6 @@ export const getMovies = async (req: Request, res: Response) => {
     const { page = 1, query } = req.query;
     let response;
     if (query) {
-        console.log('query', query);
         response = await axios.get(
             `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=en-US&query=${query}&page=${page}`,
         );

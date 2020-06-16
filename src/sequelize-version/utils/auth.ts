@@ -42,7 +42,7 @@ export const signin = async (req: Request, res: Response) => {
         return res.status(400).send({ message: 'need email and password' });
     }
 
-    const invalid = { message: 'Invalid email and passoword combination' };
+    const invalid = { message: 'Invalid email and password combination' };
 
     try {
         const user = await User.findOne({ where: { email } });
