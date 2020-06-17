@@ -8,8 +8,8 @@
   "scripts": {
     "build": "tsc",
     "start": "NODE_ENV=production node ./build/index.js",
-    "dev": "ts-node-dev --respawn --transpileOnly src/sequelize-version/index.ts",
-    "dev:graphql": "ts-node-dev --respawn --transpileOnly src/graphql-version/index.ts",
+    "dev": "ts-node-dev --respawn --transpileOnly src/rest-sequelize-version/index.ts",
+    "dev:graphql": "ts-node-dev --respawn --transpileOnly src/graphql-sequelize-version/index.ts",
     "lint": "eslint '**/*.ts' --quiet --fix",
     "graphql-codegen": "graphql-codegen --config codegen.yml"
   },
