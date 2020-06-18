@@ -10,6 +10,7 @@
     "start": "NODE_ENV=production node ./build/index.js",
     "dev": "ts-node-dev --respawn --transpileOnly src/rest-sequelize-version/index.ts",
     "dev:graphql": "ts-node-dev --respawn --transpileOnly src/graphql-sequelize-version/index.ts",
+    "predev:graphql": "yarn graphql-codegen",
     "lint": "eslint '**/*.ts' --quiet --fix",
     "graphql-codegen": "graphql-codegen --config codegen.yml"
   },
