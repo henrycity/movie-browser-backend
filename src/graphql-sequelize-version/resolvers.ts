@@ -3,7 +3,7 @@ import { AuthenticationError } from 'apollo-server';
 import { API_KEY } from './constants';
 import { newToken } from './utils/auth';
 import { MovieList } from './models/movieList';
-import { AuthInput, Resolvers } from './graphql-types';
+import { Resolvers } from './graphql-types';
 
 const resolvers: Resolvers = {
     Query: {
@@ -39,16 +39,16 @@ const resolvers: Resolvers = {
         },
     },
     Mutation: {
-        signup: async (_, { input }: { input: AuthInput }, { models }) => {
+        signup: async (_, { input }, { models }) => {
             const existing = await models.User.findOne({ where: { email: input.email } });
 
             if (existing) {
                 throw new AuthenticationError('User with email already exists');
             }
 
-            const user = await models.User.create(input);
-            const token = newToken(user.id);
-            return { token, user };
+            const { id } = await models.User.create(input);
+            const token = newToken(id);
+            return { token, id, email: input.email, lists: [] };
         },
         signin: async (_, { input }, { models }) => {
             const user = await models.User.findOne({ where: { email: input.email } });
@@ -62,7 +62,7 @@ const resolvers: Resolvers = {
             }
 
             const token = newToken(user.id);
-            return { token, user };
+            return { token, id: user.id, email: input.email, lists: [] };
         },
         createList: async (_, { input }, { models, userId }) => {
             const list = await models.List.create({ userId, name: input.name });
@@ -87,6 +87,9 @@ const resolvers: Resolvers = {
             return user;
         },
         movies: async (list, _, { axios }) => {
+            if (!list.movieLists) {
+                return [];
+            }
             const movieIds: number[] = list.movieLists.map((movieList) => movieList.get('movieId'));
             const movies = await Promise.all(
                 movieIds.map(async (movieId) => {

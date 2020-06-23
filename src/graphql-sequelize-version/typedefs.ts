@@ -7,11 +7,7 @@ const typeDefs = gql`
         id: ID!
         email: String!
         lists: [List]!
-    }
-
-    type AuthUser {
         token: String!
-        user: User!
     }
 
     type Movie {
@@ -65,15 +61,15 @@ const typeDefs = gql`
     }
 
     type Query {
-        movies(input: MoviesInput!): [Movie]
+        movies(input: MoviesInput!): [Movie!]!
         movie(input: MovieInput!): Movie!
-        lists: [List]! @authenticated
+        lists: [List!]! @authenticated
         list(input: ListInput!): List @authenticated
     }
 
     type Mutation {
-        signup(input: AuthInput!): AuthUser!
-        signin(input: AuthInput!): AuthUser!
+        signup(input: AuthInput!): User!
+        signin(input: AuthInput!): User!
         createList(input: CreateListInput!): List @authenticated
         addMovieToList(input: AddMovieToListInput!): List! @authenticated
     }

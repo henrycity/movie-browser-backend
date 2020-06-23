@@ -1,6 +1,6 @@
 schema: "http://localhost:4000"
 generates:
-  src/graphql-version/graphql-types.ts:
+  src/graphql-sequelize-version/graphql-types.ts:
     config:
       useIndexSignature: true
       mappers:

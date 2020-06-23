@@ -24,12 +24,6 @@ export type AuthInput = {
   password: Scalars['String'];
 };
 
-export type AuthUser = {
-  __typename?: 'AuthUser';
-  token: Scalars['String'];
-  user: User;
-};
-
 export enum CacheControlScope {
   Public = 'PUBLIC',
   Private = 'PRIVATE'
@@ -79,8 +73,8 @@ export type MoviesInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  signup: AuthUser;
-  signin: AuthUser;
+  signup: User;
+  signin: User;
   createList?: Maybe<List>;
   addMovieToList: List;
 };
@@ -107,9 +101,9 @@ export type MutationAddMovieToListArgs = {
 
 export type Query = {
   __typename?: 'Query';
-  movies?: Maybe<Array<Maybe<Movie>>>;
+  movies: Array<Movie>;
   movie: Movie;
-  lists: Array<Maybe<List>>;
+  lists: Array<List>;
   list?: Maybe<List>;
 };
 
@@ -134,6 +128,7 @@ export type User = {
   id: Scalars['ID'];
   email: Scalars['String'];
   lists: Array<Maybe<List>>;
+  token: Scalars['String'];
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -228,7 +223,6 @@ export type ResolversTypes = ResolversObject<{
   ListInput: ListInput;
   Mutation: ResolverTypeWrapper<{}>;
   AuthInput: AuthInput;
-  AuthUser: ResolverTypeWrapper<Omit<AuthUser, 'user'> & { user: ResolversTypes['User'] }>;
   CreateListInput: CreateListInput;
   AddMovieToListInput: AddMovieToListInput;
   CacheControlScope: CacheControlScope;
@@ -250,16 +244,9 @@ export type ResolversParentTypes = ResolversObject<{
   ListInput: ListInput;
   Mutation: {};
   AuthInput: AuthInput;
-  AuthUser: Omit<AuthUser, 'user'> & { user: ResolversParentTypes['User'] };
   CreateListInput: CreateListInput;
   AddMovieToListInput: AddMovieToListInput;
   Upload: Scalars['Upload'];
-}>;
-
-export type AuthUserResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthUser'] = ResolversParentTypes['AuthUser']> = ResolversObject<{
-  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 }>;
 
 export type ListResolvers<ContextType = any, ParentType extends ResolversParentTypes['List'] = ResolversParentTypes['List']> = ResolversObject<{
@@ -288,16 +275,16 @@ export type MovieResolvers<ContextType = any, ParentType extends ResolversParent
 }>;
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  signup?: Resolver<ResolversTypes['AuthUser'], ParentType, ContextType, RequireFields<MutationSignupArgs, 'input'>>;
-  signin?: Resolver<ResolversTypes['AuthUser'], ParentType, ContextType, RequireFields<MutationSigninArgs, 'input'>>;
+  signup?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationSignupArgs, 'input'>>;
+  signin?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationSigninArgs, 'input'>>;
   createList?: Resolver<Maybe<ResolversTypes['List']>, ParentType, ContextType, RequireFields<MutationCreateListArgs, 'input'>>;
   addMovieToList?: Resolver<ResolversTypes['List'], ParentType, ContextType, RequireFields<MutationAddMovieToListArgs, 'input'>>;
 }>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  movies?: Resolver<Maybe<Array<Maybe<ResolversTypes['Movie']>>>, ParentType, ContextType, RequireFields<QueryMoviesArgs, 'input'>>;
+  movies?: Resolver<Array<ResolversTypes['Movie']>, ParentType, ContextType, RequireFields<QueryMoviesArgs, 'input'>>;
   movie?: Resolver<ResolversTypes['Movie'], ParentType, ContextType, RequireFields<QueryMovieArgs, 'input'>>;
-  lists?: Resolver<Array<Maybe<ResolversTypes['List']>>, ParentType, ContextType>;
+  lists?: Resolver<Array<ResolversTypes['List']>, ParentType, ContextType>;
   list?: Resolver<Maybe<ResolversTypes['List']>, ParentType, ContextType, RequireFields<QueryListArgs, 'input'>>;
 }>;
 
@@ -309,11 +296,11 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   lists?: Resolver<Array<Maybe<ResolversTypes['List']>>, ParentType, ContextType>;
+  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 }>;
 
 export type Resolvers<ContextType = any> = ResolversObject<{
-  AuthUser?: AuthUserResolvers<ContextType>;
   List?: ListResolvers<ContextType>;
   Movie?: MovieResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
